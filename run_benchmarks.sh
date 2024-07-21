@@ -1,4 +1,5 @@
 #!/bin/bash
+rm -rf results/
 
 # Start services and run benchmarks
 function killServerOnPort() {
@@ -19,11 +20,13 @@ killServerOnPort 3000
 sh nginx/run.sh
 
 function runBenchmark() {
+    mkdir results/ # to store wr result/output
     killServerOnPort 8000
     sleep 5
-    local serviceScript="$1"
+    local service="$1"
+    local serviceScript="$2"
     local benchmarks=(1 2 3)
-
+  
   if [[ "$serviceScript" == *"hasura"* ]]; then
     bash "$serviceScript" # Run synchronously without background process
   else
@@ -40,10 +43,8 @@ function runBenchmark() {
   for bench in "${benchmarks[@]}"; do
     local benchmarkScript="wrk/bench.sh"
 
-    # Replace / with _
-    local sanitizedServiceScriptName=$(echo "$serviceScript" | tr '/' '_')
 
-    local resultFiles=("result1_${sanitizedServiceScriptName}.txt" "result2_${sanitizedServiceScriptName}.txt" "result3_${sanitizedServiceScriptName}.txt")
+    local resultFiles=("result1__${service}.txt" "result2__${service}.txt" "result3__${service}.txt")
 
     bash "test_query${bench}.sh" "$graphqlEndpoint"
 
@@ -57,8 +58,8 @@ function runBenchmark() {
 
         # 3 benchmark runs
         for resultFile in "${resultFiles[@]}"; do
-            echo "Running benchmark $bench for $serviceScript"
-            bash "$benchmarkScript" "$graphqlEndpoint" "$bench" >"bench${bench}_${resultFile}"
+            echo "Running benchmark $bench for $service"
+            bash "$benchmarkScript" "$graphqlEndpoint" "$bench" >"results/bench__${bench}__${resultFile}"
             if [ "$bench" == "1" ]; then
                 bench1Results+=("bench1_${resultFile}")
             elif [ "$bench" == "2" ]; then
@@ -72,8 +73,10 @@ function runBenchmark() {
 
 rm "results.md"
 
-for service in "apollo_server" "caliban" "netflix_dgs" "gqlgen" "tailcall" "async_graphql" "hasura" "graphql_jit"; do
-  runBenchmark "graphql/${service}/run.sh"
+# for service in "apollo_server" "caliban" "netflix_dgs" "gqlgen" "tailcall" "async_graphql" "hasura" "graphql_jit"; do
+
+for service in "tailcall" "hasura"; do
+  runBenchmark  "${service}" "graphql/${service}/run.sh"
   if [ "$service" == "apollo_server" ]; then
     cd graphql/apollo_server/
     npm stop
@@ -83,6 +86,7 @@ for service in "apollo_server" "caliban" "netflix_dgs" "gqlgen" "tailcall" "asyn
   fi
 done
 
-bash analyze.sh "${bench1Results[@]}"
-bash analyze.sh "${bench2Results[@]}"
-bash analyze.sh "${bench3Results[@]}"
+node analyze.js "${bench1Results[@]} - ${bench2Results[@]} - ${bench3Results[@]} -"
+
+# clean
+rm -rf results/
