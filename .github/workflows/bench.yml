@@ -1,4 +1,4 @@
-name: "Run graphql servers benchmark"
+name: "Run graphql servers benchmarks"
 
 on:
   pull_request_target:
