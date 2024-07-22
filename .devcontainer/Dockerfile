@@ -1,5 +1,6 @@
 # Start with the Microsoft's Ubuntu 22.04 base image for Codespaces
 FROM mcr.microsoft.com/vscode/devcontainers/base:ubuntu-22.04
+RUN ulimit -n 65536
 
 # Install necessary packages and tools
 RUN apt-get update && apt-get install -y \
