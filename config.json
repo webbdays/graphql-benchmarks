@@ -17,7 +17,7 @@
   "reRuns": 3,
   "warmupReqs": 3,
   "graphqlEndpoint": {
-    "hasura": "http://127.0.0.1:8081/v1/graphql",
-    "default": "http://localhost:8001/graphql"
+    "hasura": "http://127.0.0.1:8080/v1/graphql",
+    "default": "http://localhost:8000/graphql"
   }
 }
