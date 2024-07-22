@@ -36,7 +36,7 @@ for benchmark in config["benchmarks"].keys():
   
   
   ## start benchmark candidate server
-  server_start_command_script = "graphql/" + benchmark_candidate + "/run.sh";
+  server_start_command_script = "graphql/" + benchmark_candidate + "/run.sh &";
   subprocess.call(server_start_command_script);
 
   ## warmup the server
