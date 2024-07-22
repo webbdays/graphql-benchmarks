@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y \
   && rm -rf /var/lib/apt/lists/*
 
 # Install docker engine in linux
-RUN curl -fsSL https://get.docker.com -o get-docker.sh \
+RUN curl -fsSL https://get.docker.com -o get-docker.sh && \
   sudo sh get-docker.sh
 
 # Install the latest LTS version of Node.js
