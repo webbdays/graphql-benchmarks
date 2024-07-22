@@ -47,7 +47,7 @@ jobs:
             bash ./setup.sh ${{matrix.benchmark_candidate}}
             python3 ./benchmarks.py ${{matrix.benchmark_candidate}}
 
-      - name: Analyse and Print benchmark results
+      - name: Analyse and Print benchmark result
         run: |
           python3 ./analyze.py
           cat benchmark_results.json
