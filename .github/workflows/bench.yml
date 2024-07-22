@@ -77,6 +77,7 @@ jobs:
         run: |
           docker load -i /tmp/graphql-benchmarks.tar
           docker run --rm \
+          --ulimit nofile=65536:65536 \
           -v $PWD:/workspace \
           graphql-benchmarks:v1 \
           bash -c "service docker start && sleep 10 && cd /workspace && bash ./setup.sh ${{matrix.benchmark_candidate}} && python3 ./benchmark.py ${{matrix.benchmark_candidate}}"
