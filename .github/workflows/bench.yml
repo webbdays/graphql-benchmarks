@@ -29,7 +29,7 @@ jobs:
         id: changes
         run: |
           git fetch origin main
-          git diff --quiet origin/main -- .devcontainers/ Dockerfile
+          git diff --quiet origin/main -- .devcontainers/
         
       - name:   Setup docker buildx
         if: steps.changes.outputs.exit-code !=0
