@@ -76,7 +76,7 @@ jobs:
       - name: Load Docker image and Run benchmarks
         run: |
           docker load -i /tmp/graphql-benchmarks.tar
-          docker run --rm \
+          sudo docker run --rm \
           --ulimit nofile=65536:65536 \
           -v $PWD:/workspace \
           graphql-benchmarks:v1 \
