@@ -44,7 +44,6 @@ for benchmark in config["benchmarks"].keys():
     subprocess.call("sleep 1");
   
   benchmark_result = {};
-  
   for i in range(1, config["reRuns"] + 1):
     # run benchmark script
     output = subprocess.getoutput(f"bash ./wrk/run.sh ${graphql_endpoint} ${benchmark_path}");
